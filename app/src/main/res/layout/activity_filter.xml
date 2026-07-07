@@ -74,6 +74,16 @@
 				android:textColor="?attr/colorOnSurfaceVariant"
 				style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
+			<com.google.android.material.button.MaterialButton
+				android:id="@+id/addWhitelistPreset"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:layout_marginStart="8dp"
+				android:text="@string/action_add_whitelist_preset"
+				android:textColor="?attr/colorOnSurfaceVariant"
+				style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
 			<View
 				android:layout_width="match_parent"
 				android:layout_height="1dp"
@@ -111,6 +121,16 @@
 				android:layout_marginTop="8dp"
 				android:text="@string/action_add_blacklist"
 				app:icon="@drawable/ic_block_rounded"
+				android:textColor="?attr/colorOnSurfaceVariant"
+				style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+			<com.google.android.material.button.MaterialButton
+				android:id="@+id/addBlacklistPreset"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:layout_marginStart="8dp"
+				android:text="@string/action_add_blacklist_preset"
 				android:textColor="?attr/colorOnSurfaceVariant"
 				style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 

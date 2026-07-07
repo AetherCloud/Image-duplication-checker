@@ -53,6 +53,9 @@
 	<string name="filters_hint">Long-press a folder to remove it. Whitelisted folders are scanned recursively; blacklisted folders are skipped even if their parent is whitelisted. A whitelisted child of a blacklisted folder is scanned again.</string>
 	<string name="action_add_whitelist">Add to whitelist</string>
 	<string name="action_add_blacklist">Add to blacklist</string>
+	<string name="action_add_whitelist_preset">Presets</string>
+	<string name="action_add_blacklist_preset">Presets</string>
+	<string name="preset_dialog_title">Add a preset folder</string>
 	<string name="action_remove">Remove</string>
 	<string name="folder_picker_unsupported">Could not convert the selected folder to a filesystem path. Please pick a folder on the device\'s internal storage.</string>
 

@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import dk.ftb.imageduplicationchecker.data.FolderPreferences
 import dk.ftb.imageduplicationchecker.databinding.ActivityFilterBinding
 import dk.ftb.imageduplicationchecker.ui.FolderAdapter
+import dk.ftb.imageduplicationchecker.ui.PresetFolders
 import dk.ftb.imageduplicationchecker.util.PathUtils
 
 class FilterActivity : AppCompatActivity() {
@@ -73,7 +75,30 @@ class FilterActivity : AppCompatActivity() {
 			folderPicker.launch(null)
 		}
 
+		binding.addWhitelistPreset.setOnClickListener {
+			showPresetDialog(Target.WHITELIST)
+		}
+		binding.addBlacklistPreset.setOnClickListener {
+			showPresetDialog(Target.BLACKLIST)
+		}
+
 		refreshLists()
+	}
+
+	private fun showPresetDialog(target: Target) {
+		pendingTarget = target
+		val labels = PresetFolders.ALL.map { it.label }.toTypedArray()
+		AlertDialog.Builder(this)
+			.setTitle(getString(R.string.preset_dialog_title))
+			.setItems(labels) { _, which ->
+				val path = PresetFolders.ALL[which].path
+				when (target) {
+					Target.WHITELIST -> folderPrefs.addToWhitelist(path)
+					Target.BLACKLIST -> folderPrefs.addToBlacklist(path)
+				}
+				refreshLists()
+			}
+			.show()
 	}
 
 	private fun refreshLists() {
