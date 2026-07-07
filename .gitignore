@@ -16,3 +16,5 @@ local.properties
 .idea/
 /examples/
 *.jks
+*.apk
+app/release
