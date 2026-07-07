@@ -131,14 +131,11 @@ class DuplicateScan(
 	}
 
 	private fun computeHash(item: ImageItem): Long? {
-		// Reuse the MediaStore dimensions when available to skip the bounds-reading pass.
-		val bmp = BitmapDecoder.decodeSampled(
-			contentResolver,
-			item.uri,
-			targetPx = HASH_TARGET_PX,
-			knownWidth = item.width,
-			knownHeight = item.height
-		) ?: return null
+		// Decode at full ARGB_8888 (no power-of-two downsample) so the subsequent
+		// 32x32 resize inside PHash sees the source's true aspect ratio. Two
+		// perceptually identical images at different resolutions now start from
+		// the same kind of input, which is what makes the hash scale-stable.
+		val bmp = BitmapDecoder.decodeFullForHash(contentResolver, item.uri) ?: return null
 		val hash = PHash.compute(bmp)
 		bmp.recycle()
 		return hash
@@ -146,21 +143,27 @@ class DuplicateScan(
 
 	/**
 	 * Group images whose hashes are within the Hamming-distance threshold of each other.
-	 * Uses single-pass LSH-style bucketing on the lowest few bits to avoid O(n²) comparisons.
+	 * Uses 8-band LSH bucketing (8 bits per band, no overlap) so that pairs whose
+	 * near-duplicate relationship flips bits anywhere in the hash are still inspected.
+	 * For Hamming distance d <= 6, the probability of catching a pair is
+	 * 1 - (1 - C(56,6)/C(64,6))^8 ≈ 99.7%. A real Hamming-distance check inside each
+	 * bucket remains the gate.
 	 */
 	private fun groupDuplicates(items: List<ImageItem>): List<DuplicateGroup> {
+		return groupDuplicatesInternal(items)
+	}
+
+	@androidx.annotation.VisibleForTesting
+	internal fun groupDuplicatesInternal(items: List<ImageItem>): List<DuplicateGroup> {
 		if (items.size < 2) return emptyList()
 
 		val thresholdBits = (HASH_BITS * (100 - similarityThreshold) / 100).coerceAtLeast(1)
-		val buckets = HashMap<Long, MutableList<Int>>(items.size)
-		// Project the 64-bit hash into a small bucket key. Images that share the top
-		// bits almost always hash close together; we then verify with a real Hamming check.
+		val buckets = Array(BAND_COUNT) { HashMap<Int, MutableList<Int>>(items.size) }
 		for (i in items.indices) {
-			val key = items[i].phash ushr BUCKET_SHIFT
-			buckets.getOrPut(key) { mutableListOf() }.add(i)
-			// Also bucket on a second, offset band of bits to catch near-misses.
-			val altKey = (items[i].phash ushr (BUCKET_SHIFT / 2)) and ALT_MASK.toLong()
-			buckets.getOrPut(altKey) { mutableListOf() }.add(i)
+			for (band in 0 until BAND_COUNT) {
+				val key = bandKey(items[i].phash, band)
+				buckets[band].getOrPut(key) { mutableListOf() }.add(i)
+			}
 		}
 
 		val visited = BooleanArray(items.size)
@@ -175,11 +178,8 @@ class DuplicateScan(
 			while (queue.isNotEmpty()) {
 				val cur = queue.removeFirst()
 				component.add(cur)
-				// Inline the two candidate bucket keys to avoid allocating a Set per iteration.
-				val primaryKey = items[cur].phash ushr BUCKET_SHIFT
-				val altKey = (items[cur].phash ushr (BUCKET_SHIFT / 2)) and ALT_MASK.toLong()
-				for (key in listOf(primaryKey, altKey)) {
-					val bucket = buckets[key] ?: continue
+				for (band in 0 until BAND_COUNT) {
+					val bucket = buckets[band][bandKey(items[cur].phash, band)] ?: continue
 					for (j in bucket) {
 						if (!visited[j] && j != cur) {
 							if (PHash.hammingDistance(items[cur].phash, items[j].phash) <= thresholdBits) {
@@ -205,6 +205,10 @@ class DuplicateScan(
 		return groups.sortedByDescending { it.size }
 	}
 
+	private fun bandKey(phash: Long, band: Int): Int {
+		return ((phash ushr (band * BAND_BITS)) and BAND_MASK).toInt()
+	}
+
 	private fun computeGroupSimilarity(images: List<ImageItem>): Int {
 		if (images.size < 2) return 100
 		var minSim = 100
@@ -220,9 +224,9 @@ class DuplicateScan(
 	companion object {
 		const val DEFAULT_THRESHOLD = 90
 		private const val HASH_BITS = 64
-		private const val BUCKET_SHIFT = 48
-		private const val ALT_MASK = 0xFFFF
-		private const val HASH_TARGET_PX = 64
+		private const val BAND_COUNT = 8
+		private const val BAND_BITS = 8
+		private const val BAND_MASK = (1L shl BAND_BITS) - 1
 		private const val PROGRESS_BATCH = 16
 	}
 }

@@ -46,4 +46,21 @@ object BitmapDecoder {
 		while (maxDim / sample > targetPx) sample *= 2
 		return sample.coerceAtLeast(1)
 	}
+
+	/**
+	 * Decodes the image at full resolution in ARGB_8888, with no downsampling. Used
+	 * only by the hash pipeline: a single bilinear resize from this native-resolution
+	 * bitmap is more scale-stable than the two-stage cascade of `decodeSampled` (which
+	 * picks a power-of-two inSampleSize and yields different intermediate sizes for
+	 * different source resolutions) followed by `createScaledBitmap` inside PHash.
+	 *
+	 * The caller is responsible for recycling the returned bitmap.
+	 */
+	fun decodeFullForHash(resolver: ContentResolver, uri: Uri): Bitmap? {
+		val opts = BitmapFactory.Options().apply {
+			inSampleSize = 1
+			inPreferredConfig = Bitmap.Config.ARGB_8888
+		}
+		return resolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, opts) }
+	}
 }

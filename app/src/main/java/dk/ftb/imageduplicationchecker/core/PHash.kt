@@ -11,7 +11,9 @@ import android.graphics.Color
  * Algorithm:
  *  1. Scale the image to a small fixed size (32×32) and convert to grayscale.
  *  2. Compute the 2D DCT-II of the grayscale grid.
- *  3. Take the top-left 8×8 low-frequency coefficients (skipping the DC term).
+ *  3. Take the top-left 8×8 low-frequency coefficients, keeping the DC term and
+ *     dropping the single highest-frequency corner coefficient (u=7, v=7) which
+ *     is the most sensitive to aliasing under resampling.
  *  4. Build a 64-bit hash from whether each coefficient is above the median.
  *
  * Two perceptually similar images produce hashes that differ in only a few bits;
@@ -35,12 +37,15 @@ object PHash {
 		if (small != bitmap) small.recycle()
 
 		val dct = dct2d(gray, SIZE)
-		// Top-left 8×8 block, skip the very first (DC) coefficient → 63 values + 1 = 64 bits.
+		// Top-left 8×8 block of low-frequency coefficients. Include the DC term
+		// (mean luminance, very stable under resampling) and drop the single
+		// highest-frequency corner (u=7, v=7), which is most sensitive to aliasing.
+		// 64 coefficients → 64-bit hash.
 		val values = FloatArray(HASH_BITS)
 		var idx = 0
 		outer@ for (v in 0 until SMALL) {
 			for (u in 0 until SMALL) {
-				if (u == 0 && v == 0) continue
+				if (u == 7 && v == 7) continue
 				values[idx++] = dct[v * SIZE + u]
 				if (idx == HASH_BITS) break@outer
 			}
