@@ -8,30 +8,20 @@
     (set in themes.xml), or directly via @color/brand_secondary where needed.
 -->
 <resources>
-	<!-- Legacy Material defaults (kept for compatibility; not used directly by app) -->
-	<color name="purple_200">#BB86FC</color>
-	<color name="purple_500">#6200EE</color>
-	<color name="purple_700">#3700B3</color>
-	<color name="teal_200">#03DAC5</color>
-	<color name="teal_700">#018786</color>
-	<color name="black">#000000</color>
-	<color name="white">#FFFFFF</color>
-
 	<!-- Brand / accent -->
-	<color name="brand_primary">#1F6F8B</color>            <!-- toolbar, FAB, status bar -->
-	<color name="brand_primary_variant">#14525F</color>   <!-- status bar shade -->
-	<color name="brand_secondary">#B00020</color>         <!-- delete buttons, danger tint -->
-	<color name="brand_on_primary">#FFFFFF</color>        <!-- text/icons on primary -->
+	<color name="brand_primary">#98D98E</color>            <!-- toolbar, FAB, status bar (mint) -->
+	<color name="brand_primary_variant">#5E9C56</color>   <!-- status bar shade (darker mint) -->
+	<color name="brand_secondary">#C0524A</color>         <!-- delete buttons, danger tint (warm red) -->
+	<color name="brand_on_primary">#0E2A0D</color>        <!-- text/icons on primary (dark green) -->
 	<color name="brand_on_secondary">#FFFFFF</color>      <!-- text/icons on secondary -->
 
 	<!-- Surfaces (light mode defaults; overridden in values-night/colors.xml) -->
-	<color name="brand_surface">#F5F5F5</color>            <!-- screen / card backgrounds -->
-	<color name="brand_surface_variant">#E0E0E0</color>   <!-- image placeholders, status bar bg -->
-	<color name="brand_on_surface">#1C1B1F</color>       <!-- primary text on surface -->
-	<color name="brand_on_surface_variant">#49454F</color><!-- secondary text: paths, meta -->
-	<color name="brand_outline">#79747E</color>          <!-- dividers, outline buttons -->
-	<color name="surface_danger">#22B00020</color>          <!-- translucent danger overlay -->
+	<color name="brand_surface">#F4F7F4</color>            <!-- screen / card backgrounds -->
+	<color name="brand_surface_variant">#E2E8E2</color>   <!-- image placeholders, status bar bg -->
+	<color name="brand_on_surface">#1A1F1B</color>        <!-- primary text on surface -->
+	<color name="brand_on_surface_variant">#4A544E</color><!-- secondary text: paths, meta -->
+	<color name="brand_outline">#748176</color>           <!-- dividers, outline buttons -->
 
 	<!-- Launcher -->
-	<color name="ic_launcher_background">#1F6F8B</color>
+	<color name="ic_launcher_background">#98D98E</color>
 </resources>
