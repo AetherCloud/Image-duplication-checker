@@ -6,11 +6,13 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -56,6 +58,22 @@ class MainActivity : AppCompatActivity() {
 
 	private var pendingDeleteUri: Uri? = null
 
+	private var lastBackPressMs: Long = 0L
+
+	private val exitCallback = object : OnBackPressedCallback(true) {
+		override fun handleOnBackPressed() {
+			val now = SystemClock.elapsedRealtime()
+			if (now - lastBackPressMs <= EXIT_CONFIRMATION_TIMEOUT_MS) {
+				// Second press within window — let the default back behavior run.
+				isEnabled = false
+				onBackPressedDispatcher.onBackPressed()
+				return
+			}
+			lastBackPressMs = now
+			Snackbar.make(binding.root, getString(R.string.exit_warning), Snackbar.LENGTH_SHORT).show()
+		}
+	}
+
 	private val deleteLauncher = registerForActivityResult(
 		ActivityResultContracts.StartIntentSenderForResult()
 	) { result ->
@@ -88,6 +106,8 @@ class MainActivity : AppCompatActivity() {
 		binding = ActivityMainBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 		setSupportActionBar(binding.toolbar)
+
+		onBackPressedDispatcher.addCallback(this, exitCallback)
 
 		pendingDeleteUri = savedInstanceState?.getString(STATE_PENDING_DELETE_URI)?.let(Uri::parse)
 
@@ -332,5 +352,6 @@ class MainActivity : AppCompatActivity() {
 	companion object {
 		private const val TAG = "MainActivity"
 		private const val STATE_PENDING_DELETE_URI = "state_pending_delete_uri"
+		private const val EXIT_CONFIRMATION_TIMEOUT_MS = 2000L
 	}
 }

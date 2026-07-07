@@ -76,4 +76,7 @@
 	<string name="bytes_format">%1$s</string>
 	<string name="resolution_format">%1$d × %2$d</string>
 	<string name="menu_clear_results">Clear results</string>
+
+	<!-- Exit confirmation -->
+	<string name="exit_warning">If you want to exit press back again</string>
 </resources>
