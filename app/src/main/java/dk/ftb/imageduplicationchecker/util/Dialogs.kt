@@ -1,22 +1,22 @@
 package dk.ftb.imageduplicationchecker.util
 
-import android.content.Context
-import androidx.appcompat.app.AlertDialog
-import dk.ftb.imageduplicationchecker.R
+import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 
 /** Shared dialog builders so the delete-confirmation UI is consistent across screens. */
 object Dialogs {
 
+	private const val TAG = "DeleteConfirmationDialog"
+
 	fun showDeleteConfirmation(
-		context: Context,
+		activity: AppCompatActivity,
 		displayName: CharSequence,
-		onConfirm: () -> Unit
+		uri: Uri
 	) {
-		AlertDialog.Builder(context)
-			.setTitle(context.getString(R.string.delete_confirm_title))
-			.setMessage(context.getString(R.string.delete_confirm_message, displayName))
-			.setPositiveButton(context.getString(R.string.delete_ok)) { _, _ -> onConfirm() }
-			.setNegativeButton(context.getString(R.string.delete_cancel), null)
-			.show()
+		if (activity.isFinishing || activity.isDestroyed) return
+		if (activity.supportFragmentManager.findFragmentByTag(TAG) != null) return
+		DeleteConfirmationDialogFragment
+			.newInstance(displayName.toString(), uri)
+			.show(activity.supportFragmentManager, TAG)
 	}
 }

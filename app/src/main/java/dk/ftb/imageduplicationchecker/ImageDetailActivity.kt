@@ -14,6 +14,7 @@ import android.provider.MediaStore
 import com.google.android.material.snackbar.Snackbar
 import dk.ftb.imageduplicationchecker.databinding.ActivityImageDetailBinding
 import dk.ftb.imageduplicationchecker.util.BitmapDecoder
+import dk.ftb.imageduplicationchecker.util.DeleteConfirmationDialogFragment
 import dk.ftb.imageduplicationchecker.util.Dialogs
 import dk.ftb.imageduplicationchecker.util.MediaStoreDelete
 import kotlinx.coroutines.Dispatchers
@@ -62,6 +63,14 @@ class ImageDetailActivity : AppCompatActivity() {
 
 		populateDetails()
 		loadPreview()
+
+		supportFragmentManager.setFragmentResultListener(
+			DeleteConfirmationDialogFragment.REQUEST_KEY, this
+		) { _, bundle ->
+			val uri = bundle.getString(DeleteConfirmationDialogFragment.RESULT_URI)
+				?.let(Uri::parse) ?: return@setFragmentResultListener
+			performConfirmedDelete(uri)
+		}
 
 		binding.openButton.setOnClickListener { openExternal() }
 		binding.deleteButton.setOnClickListener { confirmDelete() }
@@ -134,14 +143,16 @@ class ImageDetailActivity : AppCompatActivity() {
 
 	private fun confirmDelete() {
 		val uri = imageUri ?: return
-		Dialogs.showDeleteConfirmation(this, displayName) {
-			try {
-				val sender = MediaStoreDelete.createRequestSender(contentResolver, listOf(uri))
-				deleteLauncher.launch(IntentSenderRequest.Builder(sender).build())
-			} catch (e: Exception) {
-				Log.w(TAG, "createDeleteRequest failed for $uri", e)
-				Snackbar.make(binding.root, getString(R.string.delete_failed), Snackbar.LENGTH_LONG).show()
-			}
+		Dialogs.showDeleteConfirmation(this, displayName, uri)
+	}
+
+	private fun performConfirmedDelete(uri: Uri) {
+		try {
+			val sender = MediaStoreDelete.createRequestSender(contentResolver, listOf(uri))
+			deleteLauncher.launch(IntentSenderRequest.Builder(sender).build())
+		} catch (e: Exception) {
+			Log.w(TAG, "createDeleteRequest failed for $uri", e)
+			Snackbar.make(binding.root, getString(R.string.delete_failed), Snackbar.LENGTH_LONG).show()
 		}
 	}
 

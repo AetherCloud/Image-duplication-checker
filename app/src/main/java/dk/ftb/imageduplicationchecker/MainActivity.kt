@@ -27,6 +27,7 @@ import dk.ftb.imageduplicationchecker.data.FolderPreferences
 import dk.ftb.imageduplicationchecker.data.ImageItem
 import dk.ftb.imageduplicationchecker.databinding.ActivityMainBinding
 import dk.ftb.imageduplicationchecker.ui.DuplicateGroupAdapter
+import dk.ftb.imageduplicationchecker.util.DeleteConfirmationDialogFragment
 import dk.ftb.imageduplicationchecker.util.Dialogs
 import dk.ftb.imageduplicationchecker.util.MediaStoreDelete
 import dk.ftb.imageduplicationchecker.util.ThumbnailCache
@@ -87,6 +88,14 @@ class MainActivity : AppCompatActivity() {
 		setSupportActionBar(binding.toolbar)
 
 		pendingDeleteUri = savedInstanceState?.getString(STATE_PENDING_DELETE_URI)?.let(Uri::parse)
+
+		supportFragmentManager.setFragmentResultListener(
+			DeleteConfirmationDialogFragment.REQUEST_KEY, this
+		) { _, bundle ->
+			val uri = bundle.getString(DeleteConfirmationDialogFragment.RESULT_URI)
+				?.let(Uri::parse) ?: return@setFragmentResultListener
+			performConfirmedDelete(uri)
+		}
 
 		folderPrefs = FolderPreferences(this)
 
@@ -303,16 +312,18 @@ class MainActivity : AppCompatActivity() {
 		group: DuplicateGroup,
 		item: ImageItem
 	) {
-		Dialogs.showDeleteConfirmation(this, item.displayName) {
-			try {
-				pendingDeleteUri = item.uri
-				val sender = MediaStoreDelete.createRequestSender(contentResolver, listOf(item.uri))
-				deleteLauncher.launch(IntentSenderRequest.Builder(sender).build())
-			} catch (e: Exception) {
-				pendingDeleteUri = null
-				Log.w(TAG, "createDeleteRequest failed for ${item.uri}", e)
-				Snackbar.make(binding.root, getString(R.string.delete_failed), Snackbar.LENGTH_LONG).show()
-			}
+		Dialogs.showDeleteConfirmation(this, item.displayName, item.uri)
+	}
+
+	private fun performConfirmedDelete(uri: Uri) {
+		try {
+			pendingDeleteUri = uri
+			val sender = MediaStoreDelete.createRequestSender(contentResolver, listOf(uri))
+			deleteLauncher.launch(IntentSenderRequest.Builder(sender).build())
+		} catch (e: Exception) {
+			pendingDeleteUri = null
+			Log.w(TAG, "createDeleteRequest failed for $uri", e)
+			Snackbar.make(binding.root, getString(R.string.delete_failed), Snackbar.LENGTH_LONG).show()
 		}
 	}
 
