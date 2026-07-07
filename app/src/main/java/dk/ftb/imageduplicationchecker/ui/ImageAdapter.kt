@@ -80,6 +80,7 @@ class ImageAdapter(
 			binding.imagePath.text = item.path.ifEmpty { item.uri.toString() }
 			binding.imageMeta.text = "${item.resolutionString} · ${item.sizeString}"
 			binding.viewButton.setOnClickListener { onView(item) }
+			binding.listBackground.setOnClickListener { onView(item) }
 			binding.thumb.setOnClickListener { onOpenFullImage(item) }
 			binding.deleteButton.setOnClickListener {
 				onDelete(item, bindingAdapterPosition)
