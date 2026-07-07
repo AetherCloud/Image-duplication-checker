@@ -70,6 +70,7 @@
 				android:layout_marginTop="8dp"
 				android:text="@string/action_add_whitelist"
 				app:icon="@drawable/ic_create_new_folder_rounded"
+				android:textColor="?attr/colorOnSurfaceVariant"
 				style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
 			<View
@@ -109,6 +110,7 @@
 				android:layout_marginTop="8dp"
 				android:text="@string/action_add_blacklist"
 				app:icon="@drawable/ic_block_rounded"
+				android:textColor="?attr/colorOnSurfaceVariant"
 				style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
 		</LinearLayout>
