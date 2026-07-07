@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<com.google.android.material.appbar.AppBarLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<androidx.appcompat.widget.Toolbar
+			android:id="@+id/toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="?attr/actionBarSize"
+			android:background="?attr/colorPrimary"
+			app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+			app:title="@string/title_duplicates"
+			app:titleTextColor="?attr/colorOnPrimary" />
+	</com.google.android.material.appbar.AppBarLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+		<TextView
+			android:id="@+id/statusText"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="16dp"
+			android:text="@string/scan_idle"
+			android:textAppearance="?attr/textAppearanceBodyMedium"
+			android:textSize="@dimen/text_size_body"
+			android:background="?attr/colorSurfaceVariant" />
+
+		<ProgressBar
+			android:id="@+id/progressBar"
+			style="?android:attr/progressBarStyleHorizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:visibility="gone"
+			android:max="100"
+			android:progress="0" />
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/duplicateList"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1"
+			android:clipToPadding="false"
+			android:paddingBottom="88dp"
+			android:scrollbars="vertical" />
+
+		<TextView
+			android:id="@+id/emptyText"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:padding="32dp"
+			android:text="@string/no_duplicates"
+			android:textAppearance="?attr/textAppearanceBodyLarge"
+			android:textSize="@dimen/text_size_body_large"
+			android:drawableTint="?attr/colorOnSurfaceVariant"
+			android:drawablePadding="12dp"
+			android:visibility="gone" />
+	</LinearLayout>
+
+	<com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+		android:id="@+id/scanFab"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom|end"
+		android:layout_margin="16dp"
+		android:text="@string/action_scan"
+		android:contentDescription="@string/action_scan"
+		app:icon="@drawable/ic_search_rounded" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

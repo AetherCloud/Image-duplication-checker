@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Centralized color palette. Adjust these to recolor the app app-wide.
+    - Brand colors (primary/secondary) drive toolbars, buttons, FABs.
+    - Surface colors drive backgrounds; on-surface colors drive text/icons.
+    - values-night/colors.xml overrides the surface family for dark mode.
+    Layouts reference these via ?attr/colorPrimary, ?attr/colorSurface, etc.
+    (set in themes.xml), or directly via @color/brand_secondary where needed.
+-->
+<resources>
+	<!-- Legacy Material defaults (kept for compatibility; not used directly by app) -->
+	<color name="purple_200">#FFBB86FC</color>
+	<color name="purple_500">#FF6200EE</color>
+	<color name="purple_700">#FF3700B3</color>
+	<color name="teal_200">#FF03DAC5</color>
+	<color name="teal_700">#FF018786</color>
+	<color name="black">#FF000000</color>
+	<color name="white">#FFFFFFFF</color>
+
+	<!-- Brand / accent -->
+	<color name="brand_primary">#FF1F6F8B</color>            <!-- toolbar, FAB, status bar -->
+	<color name="brand_primary_variant">#FF14525F</color>   <!-- status bar shade -->
+	<color name="brand_secondary">#FFB00020</color>         <!-- delete buttons, danger tint -->
+	<color name="brand_on_primary">#FFFFFFFF</color>        <!-- text/icons on primary -->
+	<color name="brand_on_secondary">#FFFFFFFF</color>      <!-- text/icons on secondary -->
+
+	<!-- Surfaces (light mode defaults; overridden in values-night/colors.xml) -->
+	<color name="brand_surface">#FFF5F5F5</color>            <!-- screen / card backgrounds -->
+	<color name="brand_surface_variant">#FFE0E0E0</color>   <!-- image placeholders, status bar bg -->
+	<color name="brand_on_surface">#FF1C1B1F</color>       <!-- primary text on surface -->
+	<color name="brand_on_surface_variant">#FF49454F</color><!-- secondary text: paths, meta -->
+	<color name="brand_outline">#FF79747E</color>          <!-- dividers, outline buttons -->
+	<color name="surface_danger">#22B00020</color>          <!-- translucent danger overlay -->
+
+	<!-- Launcher -->
+	<color name="ic_launcher_background">#FF1F6F8B</color>
+</resources>

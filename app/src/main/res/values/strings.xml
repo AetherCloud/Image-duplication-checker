@@ -1,0 +1,74 @@
+<resources>
+	<string name="app_name">Image duplication checker</string>
+
+	<!-- Main screen -->
+	<string name="title_duplicates">Duplicates</string>
+	<string name="title_filters">Folder filters</string>
+	<string name="title_image_detail">Image detail</string>
+
+	<!-- Main actions -->
+	<string name="action_scan">Scan for duplicates</string>
+	<string name="action_filters">Folder filters</string>
+	<string name="action_stop">Stop</string>
+	<string name="action_settings">Settings</string>
+
+	<!-- Scan states -->
+	<string name="scan_idle">Tap "Scan" to find duplicate images.</string>
+	<string name="scan_scanning">Scanning %1$d / %2$d images…</string>
+	<string name="scan_hashing">Computing hashes…</string>
+	<string name="scan_done">Done. Found %1$d duplicate group(s).</string>
+	<string name="scan_no_duplicates">No duplicates found.</string>
+	<string name="scan_no_images">No images found in the selected folders.</string>
+	<string name="scan_stopped">Scan stopped.</string>
+
+	<!-- Duplicate list -->
+	<string name="group_header">%1$d images · %2$d%% similar</string>
+	<string name="no_duplicates">No duplicate groups to show.</string>
+
+	<!-- Image detail -->
+	<string name="detail_name">Name</string>
+	<string name="detail_path">Location</string>
+	<string name="detail_resolution">Resolution</string>
+	<string name="detail_size">File size</string>
+	<string name="detail_similar_to">Similar to</string>
+	<string name="action_open">Open with</string>
+	<string name="action_delete">Delete</string>
+	<string name="action_open_deleted_in_viewer">View</string>
+	<string name="delete_confirm_title">Delete image</string>
+	<string name="delete_confirm_message">Delete this file permanently?\n%1$s</string>
+	<string name="delete_cancel">Cancel</string>
+	<string name="delete_ok">Delete</string>
+	<string name="delete_failed">Could not delete the file.</string>
+	<string name="delete_success">Image deleted.</string>
+	<string name="image_not_found">Image not found.</string>
+	<string name="open_failed">No app available to open this image.</string>
+
+	<!-- Filters -->
+	<string name="filters_whitelist_title">Whitelist (scan these folders)</string>
+	<string name="filters_blacklist_title">Blacklist (ignore these folders)</string>
+	<string name="filters_whitelist_empty">No folders whitelisted. Add a folder to start scanning.</string>
+	<string name="filters_blacklist_empty">No folders blacklisted.</string>
+	<string name="filters_hint">Long-press a folder to remove it. Whitelisted folders are scanned recursively; blacklisted folders are skipped even if their parent is whitelisted. A whitelisted child of a blacklisted folder is scanned again.</string>
+	<string name="action_add_whitelist">Add to whitelist</string>
+	<string name="action_add_blacklist">Add to blacklist</string>
+	<string name="action_remove">Remove</string>
+	<string name="folder_picker_unsupported">Could not convert the selected folder to a filesystem path. Please pick a folder on the device\'s internal storage.</string>
+
+	<!-- Permissions -->
+	<string name="perm_rationale">This app needs access to your images to find duplicates. Granting access is required for the scan to work.</string>
+	<string name="perm_grant">Grant access</string>
+	<string name="perm_denied">Permission to access images was denied. Grant it from the system settings to scan.</string>
+	<string name="perm_open_settings">Open settings</string>
+
+	<!-- Misc -->
+	<string name="content_desc_thumbnail">Image thumbnail</string>
+	<string name="content_desc_full_image">Full screen image</string>
+	<string name="title_full_image">Image viewer</string>
+	<string name="content_desc_back">Back</string>
+	<string name="loading">Loading…</string>
+	<string name="calculating">calculating</string>
+	<string name="unknown">unknown</string>
+	<string name="bytes_format">%1$s</string>
+	<string name="resolution_format">%1$d × %2$d</string>
+	<string name="menu_clear_results">Clear results</string>
+</resources>

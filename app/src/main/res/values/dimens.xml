@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Centralized text size tokens. Adjust these to scale text app-wide. -->
+	<dimen name="text_size_caption">12sp</dimen>     <!-- secondary meta: file paths, image meta -->
+	<dimen name="text_size_body">14sp</dimen>        <!-- primary body text -->
+	<dimen name="text_size_body_large">16sp</dimen>  <!-- emphasized body, empty states -->
+	<dimen name="text_size_title">16sp</dimen>       <!-- section/row headers (bold) -->
+	<dimen name="text_size_label">14sp</dimen>       <!-- detail screen label cells (bold) -->
+</resources>

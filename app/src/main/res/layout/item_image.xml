@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:gravity="center_vertical"
+	android:paddingVertical="6dp">
+
+	<ImageView
+		android:id="@+id/thumb"
+		android:layout_width="64dp"
+		android:layout_height="64dp"
+		android:scaleType="centerCrop"
+		android:contentDescription="@string/content_desc_thumbnail"
+		android:background="?attr/colorSurfaceVariant"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="?attr/selectableItemBackgroundBorderless"
+		android:layout_marginEnd="12dp" />
+
+	<LinearLayout
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:orientation="vertical">
+
+		<TextView
+			android:id="@+id/imageName"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textAppearance="?attr/textAppearanceBodyMedium"
+			android:textSize="@dimen/text_size_body"
+			android:textStyle="bold"
+			android:maxLines="1"
+			android:ellipsize="middle"
+			tools:ignore="HardcodedText"
+			xmlns:tools="http://schemas.android.com/tools" />
+
+		<TextView
+			android:id="@+id/imagePath"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textAppearance="?attr/textAppearanceBodySmall"
+			android:textSize="@dimen/text_size_caption"
+			android:maxLines="1"
+			android:ellipsize="middle"
+			android:textColor="?attr/colorOnSurfaceVariant"
+			tools:ignore="HardcodedText"
+			xmlns:tools="http://schemas.android.com/tools" />
+
+		<TextView
+			android:id="@+id/imageMeta"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textAppearance="?attr/textAppearanceBodySmall"
+			android:textSize="@dimen/text_size_caption"
+			android:textColor="?attr/colorOnSurfaceVariant"
+			tools:ignore="HardcodedText"
+			xmlns:tools="http://schemas.android.com/tools" />
+	</LinearLayout>
+
+	<ImageButton
+		android:id="@+id/viewButton"
+		android:layout_width="40dp"
+		android:layout_height="40dp"
+		android:src="@drawable/ic_info_rounded"
+		android:tint="?attr/colorOnSurfaceVariant"
+		android:contentDescription="@string/action_open_deleted_in_viewer"
+		android:background="?attr/selectableItemBackgroundBorderless"
+		android:layout_marginStart="4dp" />
+
+	<ImageButton
+		android:id="@+id/deleteButton"
+		android:layout_width="40dp"
+		android:layout_height="40dp"
+		android:src="@drawable/ic_delete_rounded"
+		android:contentDescription="@string/action_delete"
+		android:background="?attr/selectableItemBackgroundBorderless"
+		android:layout_marginStart="4dp"
+		app:tint="?attr/colorSecondary"
+		xmlns:app="http://schemas.android.com/apk/res-auto" />
+
+</LinearLayout>
