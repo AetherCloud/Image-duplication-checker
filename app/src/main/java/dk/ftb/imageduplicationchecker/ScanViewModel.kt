@@ -2,6 +2,7 @@ package dk.ftb.imageduplicationchecker
 
 import android.app.Application
 import android.content.ContentResolver
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -80,27 +81,12 @@ class ScanViewModel(app: Application) : AndroidViewModel(app) {
 		_state.value = State.Idle
 	}
 
-	fun deleteImage(item: ImageItem, onResult: (Boolean) -> Unit) {
-		viewModelScope.launch {
-			val ok = withContext(Dispatchers.IO) {
-				try {
-					val resolver = getApplication<Application>().contentResolver
-					resolver.delete(item.uri, null, null) > 0
-				} catch (_: Exception) {
-					false
-				}
-			}
-			if (ok) {
-				// Remove the deleted image from any cached group so the list stays in sync.
-				currentGroups = currentGroups.mapNotNull { group ->
-					val remaining = group.images.filter { it.uri != item.uri }
-					if (remaining.size >= 2) group.copy(images = remaining)
-					else null
-				}
-				_state.value = State.Done(currentGroups)
-			}
-			onResult(ok)
+	fun performDelete(uri: Uri) {
+		currentGroups = currentGroups.mapNotNull { group ->
+			val remaining = group.images.filter { it.uri != uri }
+			if (remaining.size >= 2) group.copy(images = remaining) else null
 		}
+		_state.value = State.Done(currentGroups)
 	}
 
 	/**

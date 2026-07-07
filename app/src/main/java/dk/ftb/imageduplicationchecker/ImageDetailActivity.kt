@@ -4,7 +4,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.format.Formatter
+import android.util.Log
 import android.view.View
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import android.provider.MediaStore
@@ -12,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import dk.ftb.imageduplicationchecker.databinding.ActivityImageDetailBinding
 import dk.ftb.imageduplicationchecker.util.BitmapDecoder
 import dk.ftb.imageduplicationchecker.util.Dialogs
+import dk.ftb.imageduplicationchecker.util.MediaStoreDelete
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -30,6 +34,15 @@ class ImageDetailActivity : AppCompatActivity() {
 	private var sizeBytes: Long = 0L
 	private var dateAdded: Long = 0L
 	private var dateModified: Long = 0L
+
+	private val deleteLauncher = registerForActivityResult(
+		ActivityResultContracts.StartIntentSenderForResult()
+	) { result ->
+		val uri = imageUri ?: return@registerForActivityResult
+		if (result.resultCode != RESULT_OK) return@registerForActivityResult
+		setResult(RESULT_OK, Intent().putExtra(EXTRA_DELETED_URI, uri.toString()))
+		finish()
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -122,25 +135,18 @@ class ImageDetailActivity : AppCompatActivity() {
 	private fun confirmDelete() {
 		val uri = imageUri ?: return
 		Dialogs.showDeleteConfirmation(this, displayName) {
-			lifecycleScope.launch {
-				val ok = withContext(Dispatchers.IO) {
-					try {
-						contentResolver.delete(uri, null, null) > 0
-					} catch (_: Exception) {
-						false
-					}
-				}
-				if (ok) {
-					Snackbar.make(binding.root, getString(R.string.delete_success), Snackbar.LENGTH_SHORT).show()
-					finish()
-				} else {
-					Snackbar.make(binding.root, getString(R.string.delete_failed), Snackbar.LENGTH_LONG).show()
-				}
+			try {
+				val sender = MediaStoreDelete.createRequestSender(contentResolver, listOf(uri))
+				deleteLauncher.launch(IntentSenderRequest.Builder(sender).build())
+			} catch (e: Exception) {
+				Log.w(TAG, "createDeleteRequest failed for $uri", e)
+				Snackbar.make(binding.root, getString(R.string.delete_failed), Snackbar.LENGTH_LONG).show()
 			}
 		}
 	}
 
 	companion object {
+		private const val TAG = "ImageDetailActivity"
 		private const val PREVIEW_TARGET_PX = 1024
 		const val EXTRA_URI = "extra_uri"
 		const val EXTRA_NAME = "extra_name"
@@ -150,5 +156,6 @@ class ImageDetailActivity : AppCompatActivity() {
 		const val EXTRA_SIZE = "extra_size"
 		const val EXTRA_DATE_ADDED = "extra_date_added"
 		const val EXTRA_DATE_MODIFIED = "extra_date_modified"
+		const val EXTRA_DELETED_URI = "extra_deleted_uri"
 	}
 }

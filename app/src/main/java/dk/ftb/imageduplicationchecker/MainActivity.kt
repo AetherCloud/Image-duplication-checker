@@ -7,9 +7,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import android.provider.MediaStore
@@ -26,6 +28,7 @@ import dk.ftb.imageduplicationchecker.data.ImageItem
 import dk.ftb.imageduplicationchecker.databinding.ActivityMainBinding
 import dk.ftb.imageduplicationchecker.ui.DuplicateGroupAdapter
 import dk.ftb.imageduplicationchecker.util.Dialogs
+import dk.ftb.imageduplicationchecker.util.MediaStoreDelete
 import dk.ftb.imageduplicationchecker.util.ThumbnailCache
 import kotlinx.coroutines.launch
 
@@ -49,11 +52,41 @@ class MainActivity : AppCompatActivity() {
 		}
 	}
 
+	private var pendingDeleteUri: Uri? = null
+
+	private val deleteLauncher = registerForActivityResult(
+		ActivityResultContracts.StartIntentSenderForResult()
+	) { result ->
+		val uri = pendingDeleteUri
+		pendingDeleteUri = null
+		if (uri == null) return@registerForActivityResult
+		if (result.resultCode != RESULT_OK) return@registerForActivityResult
+		lifecycleScope.launch {
+			viewModel.performDelete(uri)
+			Snackbar.make(binding.root, getString(R.string.delete_success), Snackbar.LENGTH_SHORT).show()
+		}
+	}
+
+	private val detailResultLauncher = registerForActivityResult(
+		ActivityResultContracts.StartActivityForResult()
+	) { result ->
+		if (result.resultCode != RESULT_OK) return@registerForActivityResult
+		val deletedUriStr = result.data?.getStringExtra(ImageDetailActivity.EXTRA_DELETED_URI)
+			?: return@registerForActivityResult
+		val uri = Uri.parse(deletedUriStr)
+		lifecycleScope.launch {
+			viewModel.performDelete(uri)
+			Snackbar.make(binding.root, getString(R.string.delete_success), Snackbar.LENGTH_SHORT).show()
+		}
+	}
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		binding = ActivityMainBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 		setSupportActionBar(binding.toolbar)
+
+		pendingDeleteUri = savedInstanceState?.getString(STATE_PENDING_DELETE_URI)?.let(Uri::parse)
 
 		folderPrefs = FolderPreferences(this)
 
@@ -110,6 +143,11 @@ class MainActivity : AppCompatActivity() {
 		// If the user changed the folder filters, refresh the existing results so a removed
 		// folder's images don't linger on screen.
 		folderFilter()?.let { viewModel.refreshIfStale(it) }
+	}
+
+	override fun onSaveInstanceState(outState: Bundle) {
+		super.onSaveInstanceState(outState)
+		pendingDeleteUri?.let { outState.putString(STATE_PENDING_DELETE_URI, it.toString()) }
 	}
 
 	private fun hasImagePermission(): Boolean {
@@ -247,7 +285,7 @@ class MainActivity : AppCompatActivity() {
 			putExtra(ImageDetailActivity.EXTRA_DATE_ADDED, item.dateAdded)
 			putExtra(ImageDetailActivity.EXTRA_DATE_MODIFIED, item.dateModified)
 		}
-		startActivity(intent)
+		detailResultLauncher.launch(intent)
 	}
 
 	private fun openFullImage(item: ImageItem) {
@@ -266,15 +304,20 @@ class MainActivity : AppCompatActivity() {
 		item: ImageItem
 	) {
 		Dialogs.showDeleteConfirmation(this, item.displayName) {
-			viewModel.deleteImage(item) { success ->
-				if (success) {
-					Snackbar.make(binding.root, getString(R.string.delete_success), Snackbar.LENGTH_SHORT).show()
-					// The list refresh is driven by the ScanViewModel.State.Done observer
-					// in renderState(); no manual adapter mutation needed here.
-				} else {
-					Snackbar.make(binding.root, getString(R.string.delete_failed), Snackbar.LENGTH_LONG).show()
-				}
+			try {
+				pendingDeleteUri = item.uri
+				val sender = MediaStoreDelete.createRequestSender(contentResolver, listOf(item.uri))
+				deleteLauncher.launch(IntentSenderRequest.Builder(sender).build())
+			} catch (e: Exception) {
+				pendingDeleteUri = null
+				Log.w(TAG, "createDeleteRequest failed for ${item.uri}", e)
+				Snackbar.make(binding.root, getString(R.string.delete_failed), Snackbar.LENGTH_LONG).show()
 			}
 		}
+	}
+
+	companion object {
+		private const val TAG = "MainActivity"
+		private const val STATE_PENDING_DELETE_URI = "state_pending_delete_uri"
 	}
 }
