@@ -14,6 +14,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="?attr/actionBarSize"
 			android:background="?attr/colorPrimary"
+			app:theme="@style/ThemeOverlay.ImageDuplicationChecker.Toolbar"
 			app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
 			app:title="@string/title_duplicates"
 			app:titleTextColor="?attr/colorOnPrimary" />
