@@ -18,6 +18,7 @@ import android.provider.MediaStore
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -83,6 +84,7 @@ class MainActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
 		binding = ActivityMainBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 		setSupportActionBar(binding.toolbar)

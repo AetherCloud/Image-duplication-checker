@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import dk.ftb.imageduplicationchecker.data.FolderPreferences
 import dk.ftb.imageduplicationchecker.databinding.ActivityFilterBinding
@@ -41,6 +42,7 @@ class FilterActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
 		binding = ActivityFilterBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 		setSupportActionBar(binding.toolbar)

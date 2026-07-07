@@ -9,6 +9,7 @@ import android.view.View
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import android.provider.MediaStore
 import com.google.android.material.snackbar.Snackbar
@@ -47,6 +48,7 @@ class ImageDetailActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
 		binding = ActivityImageDetailBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 		setSupportActionBar(binding.toolbar)
