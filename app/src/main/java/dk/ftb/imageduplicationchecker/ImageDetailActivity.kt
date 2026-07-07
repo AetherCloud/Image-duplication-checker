@@ -7,6 +7,7 @@ import android.text.format.Formatter
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import android.provider.MediaStore
 import com.google.android.material.snackbar.Snackbar
 import dk.ftb.imageduplicationchecker.databinding.ActivityImageDetailBinding
 import dk.ftb.imageduplicationchecker.util.BitmapDecoder
@@ -14,6 +15,8 @@ import dk.ftb.imageduplicationchecker.util.Dialogs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.DateFormat
+import java.util.Date
 
 class ImageDetailActivity : AppCompatActivity() {
 
@@ -25,6 +28,8 @@ class ImageDetailActivity : AppCompatActivity() {
 	private var width: Int = 0
 	private var height: Int = 0
 	private var sizeBytes: Long = 0L
+	private var dateAdded: Long = 0L
+	private var dateModified: Long = 0L
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -39,6 +44,8 @@ class ImageDetailActivity : AppCompatActivity() {
 		width = intent.getIntExtra(EXTRA_WIDTH, 0)
 		height = intent.getIntExtra(EXTRA_HEIGHT, 0)
 		sizeBytes = intent.getLongExtra(EXTRA_SIZE, 0L)
+		dateAdded = intent.getLongExtra(EXTRA_DATE_ADDED, 0L)
+		dateModified = intent.getLongExtra(EXTRA_DATE_MODIFIED, 0L)
 
 		populateDetails()
 		loadPreview()
@@ -57,7 +64,15 @@ class ImageDetailActivity : AppCompatActivity() {
 			getString(R.string.unknown)
 		}
 		binding.detailSize.text = Formatter.formatFileSize(this, sizeBytes)
+		binding.detailDateAdded.text = formatDate(dateAdded)
+		binding.detailDateModified.text = formatDate(dateModified)
 		binding.toolbar.title = displayName.ifEmpty { getString(R.string.title_image_detail) }
+	}
+
+	private fun formatDate(seconds: Long): String {
+		if (seconds <= 0L) return getString(R.string.unknown)
+		return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
+			.format(Date(seconds * 1000L))
 	}
 
 	private fun loadPreview() {
@@ -133,5 +148,7 @@ class ImageDetailActivity : AppCompatActivity() {
 		const val EXTRA_WIDTH = "extra_width"
 		const val EXTRA_HEIGHT = "extra_height"
 		const val EXTRA_SIZE = "extra_size"
+		const val EXTRA_DATE_ADDED = "extra_date_added"
+		const val EXTRA_DATE_MODIFIED = "extra_date_modified"
 	}
 }

@@ -85,6 +85,26 @@
 						android:textAppearance="?attr/textAppearanceBodyMedium"
 						android:textSize="@dimen/text_size_body" />
 				</TableRow>
+
+				<TableRow android:paddingTop="8dp">
+					<TextView android:text="@string/detail_date_added"
+						android:textStyle="bold"
+						android:textSize="@dimen/text_size_label"
+						android:paddingEnd="16dp" />
+					<TextView android:id="@+id/detailDateAdded"
+						android:textAppearance="?attr/textAppearanceBodyMedium"
+						android:textSize="@dimen/text_size_body" />
+				</TableRow>
+
+				<TableRow android:paddingTop="8dp">
+					<TextView android:text="@string/detail_date_modified"
+						android:textStyle="bold"
+						android:textSize="@dimen/text_size_label"
+						android:paddingEnd="16dp" />
+					<TextView android:id="@+id/detailDateModified"
+						android:textAppearance="?attr/textAppearanceBodyMedium"
+						android:textSize="@dimen/text_size_body" />
+				</TableRow>
 			</TableLayout>
 
 			<LinearLayout

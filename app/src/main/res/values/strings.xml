@@ -30,6 +30,8 @@
 	<string name="detail_path">Location</string>
 	<string name="detail_resolution">Resolution</string>
 	<string name="detail_size">File size</string>
+	<string name="detail_date_added">Created</string>
+	<string name="detail_date_modified">Changed</string>
 	<string name="detail_similar_to">Similar to</string>
 	<string name="action_open">Open with</string>
 	<string name="action_delete">Delete</string>

@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import android.provider.MediaStore
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -243,6 +244,8 @@ class MainActivity : AppCompatActivity() {
 			putExtra(ImageDetailActivity.EXTRA_WIDTH, item.width)
 			putExtra(ImageDetailActivity.EXTRA_HEIGHT, item.height)
 			putExtra(ImageDetailActivity.EXTRA_SIZE, item.sizeBytes)
+			putExtra(ImageDetailActivity.EXTRA_DATE_ADDED, item.dateAdded)
+			putExtra(ImageDetailActivity.EXTRA_DATE_MODIFIED, item.dateModified)
 		}
 		startActivity(intent)
 	}

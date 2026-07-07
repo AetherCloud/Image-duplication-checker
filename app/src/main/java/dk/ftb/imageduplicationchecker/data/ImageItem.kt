@@ -10,6 +10,7 @@ data class ImageItem(
 	val width: Int,
 	val height: Int,
 	val sizeBytes: Long,
+	val dateAdded: Long,
 	val dateModified: Long,
 	val phash: Long
 ) {

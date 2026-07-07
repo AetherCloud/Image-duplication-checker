@@ -74,6 +74,7 @@ class DuplicateScan(
 			MediaStore.Images.Media.WIDTH,
 			MediaStore.Images.Media.HEIGHT,
 			MediaStore.Images.Media.SIZE,
+			MediaStore.Images.Media.DATE_ADDED,
 			MediaStore.Images.Media.DATE_MODIFIED
 		)
 		val results = ArrayList<ImageItem>(64)
@@ -91,7 +92,8 @@ class DuplicateScan(
 			val widthIdx = c.getColumnIndex(MediaStore.Images.Media.WIDTH)
 			val heightIdx = c.getColumnIndex(MediaStore.Images.Media.HEIGHT)
 			val sizeIdx = c.getColumnIndex(MediaStore.Images.Media.SIZE)
-			val dateIdx = c.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED)
+			val addedIdx = c.getColumnIndex(MediaStore.Images.Media.DATE_ADDED)
+			val modifiedIdx = c.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED)
 
 			while (c.moveToNext()) {
 				if (cancelled) break
@@ -101,7 +103,8 @@ class DuplicateScan(
 				val width = if (widthIdx >= 0) c.getInt(widthIdx) else 0
 				val height = if (heightIdx >= 0) c.getInt(heightIdx) else 0
 				val size = if (sizeIdx >= 0) c.getLong(sizeIdx) else 0L
-				val date = if (dateIdx >= 0) c.getLong(dateIdx) else 0L
+				val added = if (addedIdx >= 0) c.getLong(addedIdx) else 0L
+				val modified = if (modifiedIdx >= 0) c.getLong(modifiedIdx) else 0L
 				results.add(
 					ImageItem(
 						uri = uri,
@@ -110,7 +113,8 @@ class DuplicateScan(
 						width = width,
 						height = height,
 						sizeBytes = size,
-						dateModified = date,
+						dateAdded = added,
+						dateModified = modified,
 						phash = 0L
 					)
 				)
