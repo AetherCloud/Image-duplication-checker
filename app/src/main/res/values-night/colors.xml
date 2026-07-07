@@ -5,12 +5,12 @@
 -->
 <resources>
 	<!-- Dark mode danger/secondary overrides (Material 3 dark error red) -->
-	<color name="brand_secondary">#FFCF6679</color>
-	<color name="brand_on_secondary">#FF900021</color>
+	<color name="brand_secondary">#CF6679</color>
+	<color name="brand_on_secondary">#900021</color>
 
-	<color name="brand_surface">#FF121212</color>            <!-- screen / card backgrounds -->
-	<color name="brand_surface_variant">#FF2A2A2A</color>    <!-- image placeholders, status bar bg -->
-	<color name="brand_on_surface">#FFE6E1E5</color>         <!-- primary text on surface -->
-	<color name="brand_on_surface_variant">#FFCAC4D0</color><!-- secondary text: paths, meta -->
-	<color name="brand_outline">#FF938F99</color>            <!-- dividers, outline buttons -->
+	<color name="brand_surface">#121212</color>            <!-- screen / card backgrounds -->
+	<color name="brand_surface_variant">#2A2A2A</color>    <!-- image placeholders, status bar bg -->
+	<color name="brand_on_surface">#E6E1E5</color>         <!-- primary text on surface -->
+	<color name="brand_on_surface_variant">#CAC4D0</color><!-- secondary text: paths, meta -->
+	<color name="brand_outline">#938F99</color>            <!-- dividers, outline buttons -->
 </resources>
