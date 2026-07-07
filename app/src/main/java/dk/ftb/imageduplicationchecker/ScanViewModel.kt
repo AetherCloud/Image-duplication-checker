@@ -84,7 +84,10 @@ class ScanViewModel(app: Application) : AndroidViewModel(app) {
 	fun performDelete(uri: Uri) {
 		currentGroups = currentGroups.mapNotNull { group ->
 			val remaining = group.images.filter { it.uri != uri }
-			if (remaining.size >= 2) group.copy(images = remaining) else null
+			if (remaining.size >= 2) {
+				val newSim = scanner?.computeGroupSimilarity(remaining) ?: group.similarityPercent
+				group.copy(images = remaining, similarityPercent = newSim)
+			} else null
 		}
 		_state.value = State.Done(currentGroups)
 	}

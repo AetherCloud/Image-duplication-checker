@@ -202,14 +202,18 @@ class DuplicateScan(
 				)
 			}
 		}
-		return groups.sortedByDescending { it.size }
+		return groups.sortedWith(
+			compareByDescending<DuplicateGroup> { it.similarityPercent }
+				.thenByDescending { it.size }
+		)
 	}
 
 	private fun bandKey(phash: Long, band: Int): Int {
 		return ((phash ushr (band * BAND_BITS)) and BAND_MASK).toInt()
 	}
 
-	private fun computeGroupSimilarity(images: List<ImageItem>): Int {
+	@androidx.annotation.VisibleForTesting
+	internal fun computeGroupSimilarity(images: List<ImageItem>): Int {
 		if (images.size < 2) return 100
 		var minSim = 100
 		for (i in images.indices) {
