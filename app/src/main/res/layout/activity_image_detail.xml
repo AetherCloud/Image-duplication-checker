@@ -40,72 +40,148 @@
 				android:focusable="true"
 				android:foreground="?attr/selectableItemBackground" />
 
-			<TableLayout
+			<androidx.constraintlayout.widget.ConstraintLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:padding="16dp"
-				android:stretchColumns="1">
+				android:paddingHorizontal="16dp"
+				android:paddingTop="16dp"
+				android:paddingBottom="8dp">
 
-				<TableRow>
-					<TextView android:text="@string/detail_name"
-						android:textStyle="bold"
-						android:textSize="@dimen/text_size_label"
-						android:paddingEnd="16dp" />
-					<TextView android:id="@+id/detailName"
-						android:textAppearance="?attr/textAppearanceBodyMedium"
-						android:textSize="@dimen/text_size_body" />
-				</TableRow>
+				<androidx.constraintlayout.widget.Barrier
+					android:id="@+id/labelBarrier"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					app:barrierDirection="end"
+					app:constraint_referenced_ids="labelName,labelPath,labelResolution,labelSize,labelDateAdded,labelDateModified" />
 
-				<TableRow android:paddingTop="8dp">
-					<TextView android:text="@string/detail_path"
-						android:textStyle="bold"
-						android:textSize="@dimen/text_size_label"
-						android:paddingEnd="16dp" />
-					<TextView android:id="@+id/detailPath"
-						android:textAppearance="?attr/textAppearanceBodyMedium"
-						android:textSize="@dimen/text_size_body" />
-				</TableRow>
+				<TextView android:id="@+id/labelName"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/detail_name"
+					android:textStyle="bold"
+					android:textSize="@dimen/text_size_label"
+					android:paddingEnd="16dp"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="@id/detailName"
+					/>
 
-				<TableRow android:paddingTop="8dp">
-					<TextView android:text="@string/detail_resolution"
-						android:textStyle="bold"
-						android:textSize="@dimen/text_size_label"
-						android:paddingEnd="16dp" />
-					<TextView android:id="@+id/detailResolution"
-						android:textAppearance="?attr/textAppearanceBodyMedium"
-						android:textSize="@dimen/text_size_body" />
-				</TableRow>
+				<TextView android:id="@+id/detailName"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:textAppearance="?attr/textAppearanceBodyMedium"
+					android:textSize="@dimen/text_size_body"
+					app:layout_constraintStart_toEndOf="@id/labelBarrier"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintTop_toTopOf="parent" />
 
-				<TableRow android:paddingTop="8dp">
-					<TextView android:text="@string/detail_size"
-						android:textStyle="bold"
-						android:textSize="@dimen/text_size_label"
-						android:paddingEnd="16dp" />
-					<TextView android:id="@+id/detailSize"
-						android:textAppearance="?attr/textAppearanceBodyMedium"
-						android:textSize="@dimen/text_size_body" />
-				</TableRow>
+				<TextView android:id="@+id/labelPath"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/detail_path"
+					android:textStyle="bold"
+					android:textSize="@dimen/text_size_label"
+					android:paddingEnd="16dp"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="@id/detailPath"
+					/>
 
-				<TableRow android:paddingTop="8dp">
-					<TextView android:text="@string/detail_date_added"
-						android:textStyle="bold"
-						android:textSize="@dimen/text_size_label"
-						android:paddingEnd="16dp" />
-					<TextView android:id="@+id/detailDateAdded"
-						android:textAppearance="?attr/textAppearanceBodyMedium"
-						android:textSize="@dimen/text_size_body" />
-				</TableRow>
+				<TextView android:id="@+id/detailPath"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:textAppearance="?attr/textAppearanceBodyMedium"
+					android:textSize="@dimen/text_size_body"
+					android:textIsSelectable="true"
+					android:breakStrategy="simple"
+					app:layout_constraintStart_toEndOf="@id/labelBarrier"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/detailName"
+					android:layout_marginTop="8dp" />
 
-				<TableRow android:paddingTop="8dp">
-					<TextView android:text="@string/detail_date_modified"
-						android:textStyle="bold"
-						android:textSize="@dimen/text_size_label"
-						android:paddingEnd="16dp" />
-					<TextView android:id="@+id/detailDateModified"
-						android:textAppearance="?attr/textAppearanceBodyMedium"
-						android:textSize="@dimen/text_size_body" />
-				</TableRow>
-			</TableLayout>
+				<TextView android:id="@+id/labelResolution"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/detail_resolution"
+					android:textStyle="bold"
+					android:textSize="@dimen/text_size_label"
+					android:paddingEnd="16dp"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="@id/detailResolution"
+					/>
+
+				<TextView android:id="@+id/detailResolution"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:textAppearance="?attr/textAppearanceBodyMedium"
+					android:textSize="@dimen/text_size_body"
+					app:layout_constraintStart_toEndOf="@id/labelBarrier"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/detailPath"
+					android:layout_marginTop="8dp" />
+
+				<TextView android:id="@+id/labelSize"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/detail_size"
+					android:textStyle="bold"
+					android:textSize="@dimen/text_size_label"
+					android:paddingEnd="16dp"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="@id/detailSize"
+					/>
+
+				<TextView android:id="@+id/detailSize"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:textAppearance="?attr/textAppearanceBodyMedium"
+					android:textSize="@dimen/text_size_body"
+					app:layout_constraintStart_toEndOf="@id/labelBarrier"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/detailResolution"
+					android:layout_marginTop="8dp" />
+
+				<TextView android:id="@+id/labelDateAdded"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/detail_date_added"
+					android:textStyle="bold"
+					android:textSize="@dimen/text_size_label"
+					android:paddingEnd="16dp"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="@id/detailDateAdded"
+					/>
+
+				<TextView android:id="@+id/detailDateAdded"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:textAppearance="?attr/textAppearanceBodyMedium"
+					android:textSize="@dimen/text_size_body"
+					app:layout_constraintStart_toEndOf="@id/labelBarrier"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/detailSize"
+					android:layout_marginTop="8dp" />
+
+				<TextView android:id="@+id/labelDateModified"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/detail_date_modified"
+					android:textStyle="bold"
+					android:textSize="@dimen/text_size_label"
+					android:paddingEnd="16dp"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="@id/detailDateModified"
+					/>
+
+				<TextView android:id="@+id/detailDateModified"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:textAppearance="?attr/textAppearanceBodyMedium"
+					android:textSize="@dimen/text_size_body"
+					app:layout_constraintStart_toEndOf="@id/labelBarrier"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/detailDateAdded"
+					android:layout_marginTop="8dp" />
+
+			</androidx.constraintlayout.widget.ConstraintLayout>
 
 			<LinearLayout
 				android:layout_width="match_parent"
