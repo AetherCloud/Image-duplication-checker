@@ -18,6 +18,7 @@ import dk.ftb.imageduplicationchecker.util.BitmapDecoder
 import dk.ftb.imageduplicationchecker.util.DeleteConfirmationDialogFragment
 import dk.ftb.imageduplicationchecker.util.Dialogs
 import dk.ftb.imageduplicationchecker.util.MediaStoreDelete
+import dk.ftb.imageduplicationchecker.util.PathUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -81,7 +82,8 @@ class ImageDetailActivity : AppCompatActivity() {
 
 	private fun populateDetails() {
 		binding.detailName.text = displayName.ifEmpty { getString(R.string.unknown) }
-		binding.detailPath.text = path.ifEmpty { imageUri?.toString() ?: getString(R.string.unknown) }
+		binding.detailPath.text = PathUtils.displayPath(path)
+			.ifEmpty { imageUri?.toString() ?: getString(R.string.unknown) }
 		binding.detailResolution.text = if (width > 0 && height > 0) {
 			getString(R.string.resolution_format, width, height)
 		} else {

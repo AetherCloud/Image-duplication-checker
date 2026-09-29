@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dk.ftb.imageduplicationchecker.data.ImageItem
 import dk.ftb.imageduplicationchecker.databinding.ItemImageBinding
 import dk.ftb.imageduplicationchecker.util.BitmapDecoder
+import dk.ftb.imageduplicationchecker.util.PathUtils
 import dk.ftb.imageduplicationchecker.util.ThumbnailCache
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -77,7 +78,8 @@ class ImageAdapter(
 		fun bind(item: ImageItem) {
 			loadJob?.cancel()
 			binding.imageName.text = item.displayName
-			binding.imagePath.text = item.path.ifEmpty { item.uri.toString() }
+			binding.imagePath.text = PathUtils.displayPath(item.path)
+				.ifEmpty { item.uri.toString() }
 			binding.imageMeta.text = "${item.resolutionString} · ${item.sizeString}"
 			binding.viewButton.setOnClickListener { onView(item) }
 			binding.listBackground.setOnClickListener { onView(item) }

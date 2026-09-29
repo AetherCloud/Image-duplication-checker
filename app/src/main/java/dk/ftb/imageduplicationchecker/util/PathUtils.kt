@@ -35,6 +35,23 @@ object PathUtils {
 		return normalize(withoutTrailing.substring(0, idx))
 	}
 
+	/** Matches the `/storage/emulated/<userId>` root that all internal-storage paths share. */
+	private val INTERNAL_STORAGE_ROOT = Regex("^/storage/(?:emulated/\\d+|self/primary)(?:/|$)")
+
+	/**
+	 * Strips the internal-storage root from [path] so the UI can show a location relative to
+	 * shared storage ("Pictures/Screenshots") instead of the full `/storage/emulated/0/...`
+	 * prefix, which is device noise to the user. Paths on other volumes (e.g. a removable SD
+	 * card) are returned unchanged, since their volume prefix is meaningful. Returns the
+	 * original path when nothing is left after stripping (the root itself).
+	 */
+	fun displayPath(path: String): String {
+		if (path.isEmpty()) return path
+		val normalized = normalize(path)
+		val relative = normalized.replaceFirst(INTERNAL_STORAGE_ROOT, "")
+		return relative.ifEmpty { normalized }
+	}
+
 	/** Returns the parent folder of a raw filesystem path from MediaStore's DATA column. */
 	fun parentFolder(rawPath: String): String? {
 		if (rawPath.isEmpty()) return null
